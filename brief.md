@@ -175,3 +175,42 @@ Sau khi sửa:
 - Hướng dẫn tôi kiểm tra.
 - Nêu rõ kiểm tra nào đã thực hiện và chưa thực hiện.
 - Không tự commit hoặc push.
+
+---
+
+## Prompt 5 — B4: tổng tiền trong giỏ
+
+Hãy triển khai B4 theo gợi ý trong renderCart của app.js.
+Giữ nguyên hoạt động của Part A và B1–B3.
+
+Ràng buộc:
+- Chỉ sửa app.js; giữ nguyên mọi id và class.
+- Không sửa index.html, style.css, check.js hoặc README.md.
+- Không thay đổi phần Load more được cung cấp.
+- Giữ một listener click trên catalogue cho Add.
+- Cập nhật nội dung bằng textContent.
+- Không thêm thư viện hoặc chức năng ngoài yêu cầu.
+
+Yêu cầu:
+- Tính tổng tiền bằng tổng của số lượng từng sản phẩm nhân đơn giá.
+- Đọc đơn giá từ data-price trên card; chuyển chuỗi thành số bằng Number().
+- Tính đúng cả sản phẩm thêm sau bằng Load more, đặc biệt Belt.
+- Sản phẩm bị ẩn do tìm kiếm vẫn được tính nếu đã thêm vào giỏ.
+- Giữ cartCount là tổng số món.
+- Ghi phần tổng tiền vào cartTotal theo dạng:
+  ' · ' + total.toLocaleString('vi-VN') + ' đ'.
+- Không sửa giá hiển thị hoặc dữ liệu sản phẩm.
+
+Tiêu chí hoàn thành:
+- Reload rồi Add T-shirt hai lần: Cart (2) · 360.000 đ.
+- Load more rồi Add Belt một lần: Cart (3) · 500.000 đ.
+- Thử Add Tote bag: số lượng và tổng tiền không đổi.
+- Tìm cap để ẩn các sản phẩm đã mua: giỏ vẫn 3 món, 500.000 đ.
+- Nhấn Enter hoặc bấm Search: giỏ và tổng tiền còn nguyên.
+- B1–B3 và self-check 8/8 vẫn đúng; không có lỗi đỏ trong Console.
+
+Sau khi sửa:
+- Giải thích cách tính tổng và vì sao cần Number().
+- Hướng dẫn tôi kiểm tra.
+- Nêu rõ kiểm tra nào đã thực hiện và chưa thực hiện.
+- Không tự commit hoặc push.

@@ -159,4 +159,43 @@ assistant làm sai gì, và dòng nào trong bảng *Done means* ([README.md](./
 - **Ghi chú:** `submit` là sự kiện gửi form; `preventDefault()` huỷ hành vi gửi mặc định mà vẫn cho phép chạy bộ lọc.
   B3 giữ giỏ khi tìm kiếm bằng Enter/Search; tải lại trang bằng F5 vẫn khởi tạo giỏ về 0 vì chưa có lưu trữ lâu dài.
   B4 chưa triển khai.
-- **Commit:** B3 chưa commit tại thời điểm cập nhật log; assistant không tự commit hoặc push.
+- **Commit:** mình đã commit `ae43b8a` — "fix: prevent B3 search form reload".
+  Assistant không tự commit hoặc push.
+
+---
+
+## B4 (stretch) — tổng tiền trong giỏ ([app.js](./app.js))
+
+- **Tool:** OpenAI Codex (GPT-6) trong VS Code.
+- **Request:** Prompt 5 trong [brief.md](./brief.md): bổ sung tổng tiền trong `renderCart()`;
+  chỉ sửa [app.js](./app.js); đọc `data-price` bằng `Number()`, nhân số lượng và định dạng `vi-VN`;
+  tính cả sản phẩm mới sau Load more và sản phẩm bị ẩn; giữ nguyên Part A, B1–B3 và phần Load more.
+- **Changed (giữ lại):**
+  - Khởi tạo `total = 0`, duyệt `Object.entries(cart)` để lấy từng `[id, quantity]`.
+  - Tìm card bằng ``catalogue.querySelector(`.card[data-id="${id}"]`)``; truy vấn gồm cả card đang ẩn và card mới được thêm.
+  - Cộng `quantity * Number(card.dataset.price)` vào tổng tiền; `Number()` chuyển dữ liệu chuỗi thành số để tính toán.
+  - Ghi `' · ' + total.toLocaleString('vi-VN') + ' đ'` vào `cartTotal.textContent`.
+  - Giữ nguyên cách cộng số món trong `cartCount`, listener Add, B2, B3, Load more, giá hiển thị và dữ liệu sản phẩm.
+- **Rejected:** không có thay đổi B4 nào bị yêu cầu sửa lại trước khi cập nhật log.
+- **Mình đã kiểm tra những gì:**
+  - Mình yêu cầu cập nhật ghi chép sau khi assistant báo kết quả; chưa có xác nhận riêng từng thao tác kiểm tra thủ công của mình.
+  - Assistant đã chạy kiểm tra trong trình duyệt tích hợp:
+    - Reload → `Cart (0)`; Add T-shirt hai lần → `Cart (2) · 360.000 đ` — ✅ pass.
+    - Load more rồi Add Belt → `Cart (3) · 500.000 đ` — ✅ pass.
+    - Thử Add Tote bag (disabled) → số lượng và tiền không đổi — ✅ pass.
+    - Tìm `cap` để ẩn sản phẩm đã mua → giỏ vẫn 3 món, 500.000 đ — ✅ pass.
+    - Nhấn Enter rồi bấm Search → giỏ và tiền giữ nguyên; URL và `performance.timeOrigin` không đổi, không có điều hướng — ✅ pass.
+    - Add Cap khi T-shirt và Belt đang ẩn → `Cart (4) · 595.000 đ`, chứng minh lần tính lại vẫn gồm sản phẩm bị ẩn — ✅ pass.
+    - B2: `scarf`/`SCARF` → `Showing 1 of 12 products`; chuỗi `<img src=x onerror=alert(1)>` giữ nguyên văn,
+      không tạo ảnh/alert; xoá từ khóa → 12 card, status rỗng — ✅ pass.
+    - Tab tới Add rồi Enter → `Cart (5) · 775.000 đ`, tăng đúng một T-shirt — ✅ pass.
+    - Self-check vẫn `8/8`; không ghi nhận lỗi JavaScript hoặc Console error — ✅ pass.
+    - Đơn giá `data-price` và giá hiển thị của tám sản phẩm ban đầu không đổi — ✅ pass.
+  - Tab đang ẩn nên click tự động dùng `force`; chưa thử trên các trình duyệt khác.
+  - `node --check`, chẩn đoán trình soạn thảo và `git diff --check` không báo lỗi.
+  - Diff triển khai B4 chỉ thêm 6 dòng trong [app.js](./app.js); SHA-256 của các tệp khác, kể cả hai tệp ghi chép,
+    không đổi trong bước triển khai. Hai tệp ghi chép được cập nhật riêng sau đó.
+- **Ghi chú:** tổng tiền lấy từ các mục trong giỏ, không phụ thuộc card có đang hiển thị hay không.
+  Mã hiện tại giả định card của sản phẩm đã mua vẫn tồn tại trong catalogue; starter chỉ ẩn hoặc thêm card, không xoá card.
+- **Commit:** mình đã commit `d56c1a3` — "feat: implement B4 cart total".
+  Assistant không tự commit hoặc push.
