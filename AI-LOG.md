@@ -74,4 +74,50 @@ assistant làm sai gì, và dòng nào trong bảng *Done means* ([README.md](./
   - Assistant chưa kiểm tra trực tiếp B1 trong trình duyệt vì trang không được chia sẻ;
     các kết quả thao tác trình duyệt ở trên là xác nhận của mình, không phải kết quả chạy trình duyệt của assistant.
 - **Ghi chú:** B2, B3 và B4 chưa triển khai. Search vẫn có thể reload trang khi submit; việc này thuộc B3.
-- **Commit:** B1 chưa commit tại thời điểm cập nhật log; assistant không tự commit hoặc push.
+- **Commit:** mình đã commit `fe1b3d5` — "feat: implement B1 cart event delegation".
+  Commit gồm [app.js](./app.js), [brief.md](./brief.md) và [AI-LOG.md](./AI-LOG.md), tổng 91 dòng thêm / 3 dòng xoá.
+  Assistant không tự commit hoặc push.
+
+---
+
+## B2 — Filter as you type ([app.js](./app.js))
+
+- **Tool:** OpenAI Codex (GPT-6) trong VS Code.
+- **Request:** Prompt 3 trong [brief.md](./brief.md): hoàn thành `applyFilter()` và listener `input`;
+  chỉ sửa [app.js](./app.js); giữ nguyên Part A, B1 và phần Load more; so khớp tên bằng chuỗi đã trim/chuyển chữ thường;
+  giữ nguyên văn dữ liệu nhập cho thông báo không có kết quả; dùng `card.hidden` và `textContent`; chưa làm B3/B4.
+- **Changed (giữ lại):**
+  - Giữ `originalQuery = searchInput.value`, dùng `originalQuery.trim().toLowerCase()` để so khớp.
+  - Mỗi lần lọc gọi lại `catalogue.querySelectorAll('.card')`, nên xét cả sản phẩm mới sau Load more;
+    không lấy hoặc tính card chưa được thêm trong template.
+  - Đọc tên qua `.name.textContent.toLowerCase()`, so khớp bằng `includes(query)`, đặt `card.hidden` và đếm số card hiện.
+  - Ghi đè một dòng `statusBox.textContent`: `''` khi từ khóa rỗng/toàn khoảng trắng;
+    `Showing X of Y products` khi có kết quả; `No products match "<nguyên văn>"` khi không có kết quả.
+  - `searchInput.addEventListener('input', applyFilter)` lọc mỗi khi nội dung ô nhập thay đổi.
+  - Không thay đổi giỏ hàng, listener Add, phần Load more, B3/B4 hoặc tệp khác trong bước triển khai B2.
+- **Rejected:** không có thay đổi B2 nào bị yêu cầu sửa lại.
+  Mình hỏi về Enter làm reload và giỏ về 0; sau khi được giải thích đây là B3 chưa triển khai, mình đồng ý giữ phạm vi B2.
+- **Mình đã kiểm tra những gì:**
+  - Mình quan sát nhấn Enter sau tìm kiếm làm trang reload, URL có `?q=T-shirt` và giỏ trở về 0.
+    Đây là hành vi thuộc dòng 9, sẽ sửa ở B3; không ghi dòng này là pass trong B2.
+  - Assistant đã kiểm tra trực tiếp trong trình duyệt tích hợp:
+    - Trước Load more, nhập `  ScArF  ` → chỉ Scarf, `Showing 1 of 8 products` — ✅ pass.
+    - Tìm `belt` trước Load more → không có kết quả; bấm Load more → chỉ Belt, `Showing 1 of 12 products` — ✅ pass.
+    - Dòng 7: sau Load more, `scarf` và `SCARF` đều chỉ Scarf, `Showing 1 of 12 products` — ✅ pass.
+    - Xoá từ khóa hoặc nhập toàn khoảng trắng → hiện đủ 12 card, status rỗng — ✅ pass.
+    - Dòng 8: nhập `  <img src=x onerror=alert(1)>  ` → status giữ nguyên chuỗi, kể cả khoảng trắng;
+      không có alert, không tạo phần tử ảnh hoặc thẻ con trong status — ✅ pass với chuỗi thử có thêm khoảng trắng.
+    - So khớp chuỗi con: `pack` → Backpack, `Showing 1 of 12 products` — ✅ pass.
+    - B1: Add T-shirt hai lần rồi lọc nhiều lượt → số vẫn là 2; Add Belt sau Load more → 3;
+      click tên/giá không tăng; Tab tới Add rồi Enter → 4. Dữ liệu cuối là `{"tshirt":3,"belt":1}` — ✅ pass.
+    - Card trong template không bị thay đổi trạng thái ẩn — ✅ pass.
+    - Dòng 1: kết quả self-check vẫn `8/8 passed` — ✅ pass.
+    - Dòng 10: không ghi nhận lỗi JavaScript hoặc Console error trong lượt thử — ✅ pass.
+  - `node --check`, chẩn đoán trình soạn thảo và `git diff --check` không báo lỗi.
+  - Diff B2 chỉ thay đổi [app.js](./app.js) (19+/9−); SHA-256 của các tệp cần giữ nguyên, kể cả hai tệp ghi chép,
+    không đổi trong bước triển khai. Hai tệp ghi chép được cập nhật riêng sau đó.
+  - Chưa kiểm tra trên các trình duyệt khác; không coi kiểm tra của assistant là thao tác mình đã tự chạy.
+- **Ghi chú:** `textContent` hiển thị chuỗi như văn bản, không phân tích thành thẻ HTML hoặc mã xử lý sự kiện.
+  Enter hoặc nút Search vẫn submit form theo mặc định vì B3 chưa làm, khiến trang tải lại và khởi tạo lại `cart = {}`.
+  B3 sẽ dùng `submit` + `event.preventDefault()` rồi gọi `applyFilter()`; B4 cũng chưa triển khai.
+- **Commit:** B2 chưa commit tại thời điểm cập nhật log; assistant không tự commit hoặc push.

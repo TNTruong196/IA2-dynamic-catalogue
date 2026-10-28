@@ -79,3 +79,62 @@ Sau khi sửa:
 - Hướng dẫn tôi kiểm tra từng trường hợp.
 - Nêu rõ kiểm tra nào đã thực hiện, kiểm tra nào chưa.
 - Không tự commit hoặc push.
+
+---
+
+## Prompt 3 — B2: Filter as you type
+
+Hãy triển khai riêng B2 theo TODO trong app.js và bảng Done means
+trong README.md. Giữ nguyên hoạt động của Part A và B1.
+
+Ràng buộc:
+- Chỉ sửa app.js; giữ nguyên mọi id và class.
+- Không sửa index.html, style.css, check.js hoặc README.md.
+- Không thay đổi phần Load more được cung cấp.
+- Giữ một listener click trên catalogue cho Add; không thêm listener
+  riêng vào các nút Add.
+- Mọi dữ liệu người dùng hiển thị trong DOM phải dùng textContent,
+  tuyệt đối không dùng innerHTML.
+- Chưa triển khai B3 hoặc B4.
+
+Yêu cầu:
+- Hoàn thành applyFilter và gọi nó trên sự kiện input của ô tìm kiếm.
+- Giữ chuỗi gốc người dùng nhập để dùng trong thông báo không có kết quả.
+- Dùng giá trị đã trim và chuyển chữ thường để so khớp.
+- So khớp theo tên sản phẩm có chứa từ khóa, không phân biệt hoa thường.
+- Dùng card.hidden để ẩn hoặc hiện sản phẩm.
+- Mỗi lần lọc phải xét tất cả card hiện có trong catalogue,
+  gồm sản phẩm đã được thêm bằng Load more.
+- Không lọc hoặc tính card nằm trong template chưa được thêm.
+- Không thay đổi dữ liệu giỏ hàng khi lọc.
+
+Thông báo phải đúng:
+- Từ khóa rỗng hoặc chỉ có khoảng trắng: hiện mọi card, status là ''.
+- Có kết quả: Showing X of Y products.
+- Không có kết quả: No products match "<nguyên văn người dùng nhập>".
+- Chỉ cập nhật một dòng status, không nối thêm thông báo sau mỗi lần gõ.
+
+Tiêu chí hoàn thành:
+- Done means dòng 7: sau Load more, scarf và SCARF đều hiện một card
+  và Showing 1 of 12 products.
+- Trước Load more, mẫu số phải là 8.
+- Xóa từ khóa: mọi card hiện lại, status rỗng.
+- Dòng 8: nhập <img src=x onerror=alert(1)>:
+  không alert, không tạo ảnh; status hiển thị nguyên văn chuỗi đó.
+- Nếu tìm belt trước khi Load more, sau Load more phải hiện Belt
+  và cập nhật số kết quả đúng.
+- B1 và self-check 8/8 vẫn hoạt động; không có lỗi đỏ trong Console.
+
+Sau khi sửa:
+- Giải thích vì sao textContent an toàn cho dữ liệu người dùng.
+- Hướng dẫn tôi kiểm tra từng trường hợp.
+- Nêu rõ kiểm tra nào đã thực hiện và chưa thực hiện.
+- Không tự commit hoặc push.
+
+### Trao đổi sau Prompt 3
+
+- **Mình hỏi:** tại sao khi nhập tìm kiếm xong bấm enter thì mọi thứ reload lại hết và giỏ hàng về 0 lại
+- **Assistant giải thích:** Enter gửi form theo hành vi mặc định của trình duyệt, làm trang reload và thêm `?q=...` vào URL.
+  JavaScript chạy lại từ `const cart = {}`, nên giỏ về 0. B3 sẽ nghe sự kiện `submit`, gọi `event.preventDefault()`
+  rồi `applyFilter()`; B3 chưa được triển khai trong phạm vi Prompt 3.
+- **Mình phản hồi:** oke rồi thế thì cập nhật AI-LOG và brief đi
