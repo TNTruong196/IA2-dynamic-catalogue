@@ -214,3 +214,16 @@ Sau khi sửa:
 - Hướng dẫn tôi kiểm tra.
 - Nêu rõ kiểm tra nào đã thực hiện và chưa thực hiện.
 - Không tự commit hoặc push.
+
+---
+
+## Xác nhận sau hướng dẫn kiểm thử bản cuối
+
+- **Mình hỏi:** Hiện 12 sản phẩm, thông báo rỗng thông báo rỗng là sao
+- **Assistant giải thích:** khi xóa hết từ khóa, hiện lại 12 sản phẩm và dòng trạng thái
+  bên dưới ô tìm kiếm không hiện chữ nào.
+- **Mình xác nhận:** tôi test tất cả đều hoạt động đúng
+
+### Yêu cầu rà soát lại điểm tự chấm
+
+hãy tiến hành tự check lại xem tiêu chí từng phần rồi chấm chứ đừng chấm bừa nhé, check lại đi

@@ -178,7 +178,8 @@ assistant làm sai gì, và dòng nào trong bảng *Done means* ([README.md](./
   - Giữ nguyên cách cộng số món trong `cartCount`, listener Add, B2, B3, Load more, giá hiển thị và dữ liệu sản phẩm.
 - **Rejected:** không có thay đổi B4 nào bị yêu cầu sửa lại trước khi cập nhật log.
 - **Mình đã kiểm tra những gì:**
-  - Mình yêu cầu cập nhật ghi chép sau khi assistant báo kết quả; chưa có xác nhận riêng từng thao tác kiểm tra thủ công của mình.
+  - Tại thời điểm ghi mục B4 ban đầu, mình yêu cầu cập nhật ghi chép sau khi assistant báo kết quả,
+    chưa xác nhận riêng từng thao tác thủ công. Xác nhận sau đó được bổ sung trong mục kiểm thử cuối bên dưới.
   - Assistant đã chạy kiểm tra trong trình duyệt tích hợp:
     - Reload → `Cart (0)`; Add T-shirt hai lần → `Cart (2) · 360.000 đ` — ✅ pass.
     - Load more rồi Add Belt → `Cart (3) · 500.000 đ` — ✅ pass.
@@ -199,3 +200,58 @@ assistant làm sai gì, và dòng nào trong bảng *Done means* ([README.md](./
   Mã hiện tại giả định card của sản phẩm đã mua vẫn tồn tại trong catalogue; starter chỉ ẩn hoặc thêm card, không xoá card.
 - **Commit:** mình đã commit `d56c1a3` — "feat: implement B4 cart total".
   Assistant không tự commit hoặc push.
+
+---
+
+## Review toàn bài và xác nhận tự kiểm thử bản cuối — 28/10/2026
+
+- **Tool:** OpenAI Codex trong VS Code và trình duyệt tích hợp; mình tự thao tác kiểm thử theo hướng dẫn.
+- **Request:** kiểm tra toàn bộ code, docs và Git theo rubric trước khi lập báo cáo;
+  sau đó lập [SELF_ASSESSMENT_REPORT.md](./SELF_ASSESSMENT_REPORT.md).
+- **Changed:** assistant lập báo cáo, sau đó cập nhật điểm tự chấm từ 96 lên 100 khi có xác nhận
+  mình đã tự kiểm thử. Không thay đổi mã nguồn, dữ liệu sản phẩm, CSS hoặc bộ kiểm tra.
+- **Rejected:** không phát hiện lỗi chức năng cần sửa trong lượt review hoặc theo xác nhận tự kiểm thử cuối.
+  Không tạo một lỗi giả để bổ sung Rejected.
+- **Kiểm tra của assistant:**
+  - 23/23 trường hợp chức năng đạt: Done means dòng 1, 3–10 và các phép thử bổ sung cho B2/B4.
+  - Tab/Enter tăng đúng một món; sold-out và click tên/giá không tăng; Belt sau Load more Add được.
+  - `scarf`/`SCARF` tìm đúng một card trong 12; xóa ô hiện lại 12 card, status không có chữ.
+  - Chuỗi `<img src=x onerror=alert(1)>` hiện nguyên văn, không tạo ảnh/alert.
+  - Enter/Search không reload; giỏ, tổng tiền và URL giữ nguyên.
+  - T-shirt × 2 + Belt × 1 cho 3 món, 500.000 đ; giá trị sản phẩm bị ẩn vẫn được tính.
+  - Không có lỗi JavaScript hoặc Console error trong lượt thử chức năng.
+  - Dòng 2: ảnh hiện tại và bản dựng lại từ HTML/CSS starter giống từng pixel tại 1003 × 523.
+  - Dòng 11: commit `a6e3ff2` khớp năm tệp trong ZIP gốc; chỉ hai tệp mã nguồn được phép sửa thay đổi;
+    mọi id/class và dữ liệu giữ nguyên, phần Load more không đổi. Các commit riêng A, B1–B4 đầy đủ.
+- **Xác nhận của mình:** sau khi được hướng dẫn tự chạy toàn bộ Done means, Tab từ thanh địa chỉ,
+  kiểm tra Console và các thao tác B4, mình trả lời nguyên văn: **“tôi test tất cả đều hoạt động đúng”**.
+  Trước đó mình hỏi “thông báo rỗng” là gì; assistant giải thích rằng dòng trạng thái không hiện chữ
+  khi xóa hết từ khóa, không phải hiển thị chữ “rỗng”.
+- **Giới hạn bằng chứng:** xác nhận trên là kết quả mình báo trong hội thoại; mình chưa cung cấp ảnh/video
+  cho từng thao tác. Số đo tự động như `performance.timeOrigin`, màu/độ dày focus và so sánh ảnh là do
+  assistant thu thập. Lượt tự động dùng force click vì tab ẩn và không thay cho quan sát thủ công của mình.
+- **Commit:** hồ sơ B4 đã có trong `3aad26d`; cập nhật xác nhận cuối và báo cáo chưa commit tại thời điểm ghi.
+
+---
+
+## Rà soát lại cách tự chấm theo từng tiêu chí — 28/10/2026
+
+- **Tool:** OpenAI Codex trong VS Code, Git và trình duyệt tích hợp.
+- **Request (nguyên văn):** “hãy tiến hành tự check lại xem tiêu chí từng phần rồi chấm chứ đừng chấm bừa nhé, check lại đi”.
+- **Changed:** bổ sung đối chiếu từng tiêu chí trong [SELF_ASSESSMENT_REPORT.md](./SELF_ASSESSMENT_REPORT.md);
+  giữ điểm chức năng/phạm vi/brief/lịch sử là 45/10/15/10; chấm nhật ký 18/20, tổng 98/100.
+  Không sửa mã nguồn hoặc diễn biến lịch sử của các phần A/B1–B4.
+- **Rejected:** cách assistant trước đó nâng toàn bộ lên 100 ngay sau xác nhận chức năng của mình
+  chưa giải thích độc lập mức điểm của brief, nhật ký và Git. Mình yêu cầu rà soát lại từng tiêu chí.
+  Đây là vấn đề lập luận tự chấm, không phải lỗi chức năng bị một dòng Done means phát hiện.
+- **Kiểm tra:**
+  - Đọc lại rubric, từng prompt, từng mục log và diff của các commit A/B1–B4.
+  - Kiểm thử lại 16 nhóm trong trình duyệt: 16/16 đạt; không có Console error, lỗi JavaScript hoặc alert.
+    Nhóm kiểm tra bao phủ Done means dòng 1, 3–10 và các phép thử tổng tiền/tìm Belt đang lọc.
+  - Các hash trong commit starter khớp năm tệp ZIP gốc; diff CSS/check/README rỗng;
+    mã HTML/JS không đổi so với bản chức năng đã kiểm tra trước đó.
+  - Phát hiện câu B1 “không cần sửa lại” đi cùng “tất cả pass sau khi sửa” mà chưa giải thích sửa gì.
+    Chưa có căn cứ quy đó là sửa mã hoặc sửa bộ mô phỏng, nên không tự đổi nội dung lịch sử.
+- **Lý do điểm:** 18/20 là lựa chọn thận trọng trong khoảng rubric, không phải mức trừ cố định của đề.
+  Ghi chú “Nothing went wrong” vẫn được áp dụng; không trừ chỉ vì không tìm thấy lỗi AI.
+- **Commit:** phần rà soát này chưa commit tại thời điểm ghi; chưa kiểm tra gói ZIP cuối.
