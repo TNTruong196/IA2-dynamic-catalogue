@@ -138,3 +138,40 @@ Sau khi sửa:
   JavaScript chạy lại từ `const cart = {}`, nên giỏ về 0. B3 sẽ nghe sự kiện `submit`, gọi `event.preventDefault()`
   rồi `applyFilter()`; B3 chưa được triển khai trong phạm vi Prompt 3.
 - **Mình phản hồi:** oke rồi thế thì cập nhật AI-LOG và brief đi
+
+---
+
+## Prompt 4 — B3: Search form không reload trang
+
+Hãy triển khai riêng B3 theo TODO trong app.js và bảng Done means
+trong README.md. Giữ nguyên hoạt động của Part A, B1 và B2.
+
+Ràng buộc:
+- Chỉ sửa app.js; giữ nguyên mọi id và class.
+- Không sửa index.html, style.css, check.js hoặc README.md.
+- Không thay đổi phần Load more được cung cấp.
+- Giữ một listener click trên catalogue cho Add.
+- Tiếp tục dùng textContent cho dữ liệu hiển thị.
+- Chưa triển khai B4.
+
+Yêu cầu:
+- Lấy form qua searchInput.form.
+- Lắng nghe sự kiện submit trên form.
+- Gọi event.preventDefault() để ngăn điều hướng và reload.
+- Sau đó gọi applyFilter().
+- Xử lý ở submit của form để cả nhấn Enter và bấm Search đều hoạt động.
+- Không thay thế bằng cách chỉ chặn phím Enter.
+- Không dùng localStorage để che việc trang bị reload.
+
+Tiêu chí hoàn thành:
+- Done means dòng 9: thêm sản phẩm vào giỏ, gõ cap rồi nhấn Enter:
+  URL không thêm ?q=cap, trang không reload, số lượng giỏ còn nguyên,
+  kết quả tìm kiếm đúng.
+- Bấm nút Search cũng không reload và không làm mất giỏ hàng.
+- B1, B2, self-check 8/8 vẫn đúng; không có lỗi đỏ trong Console.
+
+Sau khi sửa:
+- Giải thích submit và preventDefault().
+- Hướng dẫn tôi kiểm tra.
+- Nêu rõ kiểm tra nào đã thực hiện và chưa thực hiện.
+- Không tự commit hoặc push.

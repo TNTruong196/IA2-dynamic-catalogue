@@ -120,4 +120,43 @@ assistant làm sai gì, và dòng nào trong bảng *Done means* ([README.md](./
 - **Ghi chú:** `textContent` hiển thị chuỗi như văn bản, không phân tích thành thẻ HTML hoặc mã xử lý sự kiện.
   Enter hoặc nút Search vẫn submit form theo mặc định vì B3 chưa làm, khiến trang tải lại và khởi tạo lại `cart = {}`.
   B3 sẽ dùng `submit` + `event.preventDefault()` rồi gọi `applyFilter()`; B4 cũng chưa triển khai.
-- **Commit:** B2 chưa commit tại thời điểm cập nhật log; assistant không tự commit hoặc push.
+- **Commit:** mình đã commit `4cd940b` — "feat: implement B2 safe live search".
+  Commit gồm [app.js](./app.js), [brief.md](./brief.md) và [AI-LOG.md](./AI-LOG.md).
+  Assistant không tự commit hoặc push.
+
+---
+
+## B3 — Search form không reload trang ([app.js](./app.js))
+
+- **Tool:** OpenAI Codex (GPT-6) trong VS Code.
+- **Request:** Prompt 4 trong [brief.md](./brief.md): lấy form qua `searchInput.form`, nghe `submit`,
+  gọi `event.preventDefault()` rồi `applyFilter()`; chỉ sửa [app.js](./app.js);
+  giữ nguyên Part A, B1, B2 và phần Load more; không chặn riêng phím Enter, không dùng localStorage; chưa làm B4.
+- **Changed (giữ lại):**
+  - `searchInput.form.addEventListener('submit', …)` xử lý cả Enter trong ô nhập và bấm Search.
+  - `event.preventDefault()` ngăn hành vi gửi form mặc định, nên không điều hướng hoặc reload trang.
+  - Gọi `applyFilter()` ngay sau đó để cập nhật kết quả và status theo nội dung ô tìm kiếm.
+  - Giữ nguyên listener Add, bộ lọc B2, phần Load more, mọi id/class và các tệp khác; không thêm lưu trữ giỏ hàng.
+- **Rejected:** không có. Mình xác nhận mọi thứ triển khai đúng, không có lỗi và không cần sửa lại.
+- **Mình đã kiểm tra những gì:**
+  - Sau khi được hướng dẫn kiểm tra, mình xác nhận kết quả B3 đúng và không có lỗi:
+    - Dòng 9: Add T-shirt hai lần, gõ `cap`, nhấn Enter → chỉ Cap, URL không thêm `?q=cap`, giỏ vẫn `Cart (2)` — ✅ pass.
+    - Bấm Search cũng không reload hoặc mất giỏ hàng — ✅ pass.
+    - B1, B2, self-check `8/8` vẫn đúng, Console không có lỗi đỏ — ✅ pass.
+  - Assistant đã chạy kiểm tra trong trình duyệt tích hợp:
+    - Enter và Search giữ nguyên URL và `performance.timeOrigin`; không ghi nhận điều hướng, giỏ vẫn 2 và kết quả `Showing 1 of 8 products`.
+    - Add Cap sau submit → giỏ 3; tìm `belt` không có kết quả vẫn giữ giỏ.
+    - Load more khi đang tìm `belt` → hiện Belt, `Showing 1 of 12 products`; Add Belt rồi Search → giỏ vẫn 4.
+    - `scarf` và `SCARF` rồi Enter đều hiện Scarf, `Showing 1 of 12 products`.
+    - Nhập `<img src=x onerror=alert(1)>` rồi Search → thông báo nguyên văn, không ảnh hoặc alert.
+    - Từ khóa toàn khoảng trắng rồi Enter → hiện đủ 12 card, status rỗng, giỏ vẫn 4.
+    - Self-check đạt `8/8`; không ghi nhận lỗi JavaScript hoặc Console error trong lượt thử.
+  - Tab trình duyệt đang ẩn khiến click thông thường timeout; assistant dùng click với tùy chọn `force` để kiểm tra xử lý sự kiện.
+    Đây là giới hạn của thao tác tự động, không phải lỗi mã B3. Chưa thử trên trình duyệt khác.
+  - `node --check`, chẩn đoán trình soạn thảo và `git diff --check` không báo lỗi.
+  - Diff B3 chỉ thay đổi [app.js](./app.js) (4+/1−); SHA-256 của các tệp khác, gồm hai tệp ghi chép, không đổi
+    trong bước triển khai. Hai tệp ghi chép được cập nhật riêng sau khi mình xác nhận kết quả.
+- **Ghi chú:** `submit` là sự kiện gửi form; `preventDefault()` huỷ hành vi gửi mặc định mà vẫn cho phép chạy bộ lọc.
+  B3 giữ giỏ khi tìm kiếm bằng Enter/Search; tải lại trang bằng F5 vẫn khởi tạo giỏ về 0 vì chưa có lưu trữ lâu dài.
+  B4 chưa triển khai.
+- **Commit:** B3 chưa commit tại thời điểm cập nhật log; assistant không tự commit hoặc push.
